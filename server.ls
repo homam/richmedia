@@ -25,7 +25,7 @@ app.get '/api/converted', (req, res) ->
 campaigns-map = (campaignId, impressionId) ->
     match campaignId
     # gx, Mobitrans
-    | 1025 => "/?impressionId=#{impressionId}"
+    | 1025 => "http://pages.mobileacademy.com/om/_/ma/LearnAnyTimeAnyWhere/531/17784/?impressionid=#{impressionId}"
     | _ => throw "Invalid Campaign Id"
 
 app.get '/api/impression-and-click/:campaignId', (req, res) ->
