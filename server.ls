@@ -24,8 +24,29 @@ app.get '/api/converted', (req, res) ->
 
 campaigns-map = (campaignId, impressionId) ->
     match campaignId
-    # gx, Mobitrans
+    # AE, Mobitrans
+    # gx
     | 1025 => "http://pages.mobileacademy.com/om/_/ma/LearnAnyTimeAnyWhere/531/17784/?impressionid=#{impressionId}"
+    # IT, Mobitrans
+    # gy
+    | 1026 => "http://start.mobileacademy.com/?campaignid=17821&forcedPage=484&v=529&impressionid=#{impressionId}"
+    # gz
+    | 1027 => "http://start.mobileacademy.com/?campaignid=17821&forcedPage=656&v=526&impressionid=#{impressionId}"
+    # QA, Mobitrans
+    # gA
+    | 1028 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=485&v=585&impressionid=#{impressionId}"
+    # gB
+    | 1029 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=727&v=545&impressionid=#{impressionId}"
+    # gC
+    | 1030 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=757&v=549&impressionid=#{impressionId}"
+    # OM, Mobitrans
+    # gD
+    | 1031 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=609&v=542&impressionid=#{impressionId}"
+    # gE
+    | 1032 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=484&v=539&impressionid=#{impressionId}"
+    # gF
+    | 1033 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=458&v=640&impressionid=#{impressionId}"
+
     | _ => throw "Invalid Campaign Id"
 
 app.get '/api/impression-and-click/:campaignId', (req, res) ->
