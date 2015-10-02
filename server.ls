@@ -1,9 +1,21 @@
-{http-port, converted-log} = require \./config
+{http-port, converted-log, impression-and-click-log-bson, converted-log-bson} = require \./config
 express = require \express
 app = express!
     ..disable 'x-powered-by'
 fs = require \fs
 base62 = require \base62
+
+
+log = do ->
+    streams = {}
+    (file, message) -->
+        if !streams[file]
+            streams[file] = fs.createWriteStream file, {flags: \a}
+        streams[file].write message + "\n"
+
+log-obj = (file, message) -->
+    log file, (JSON.stringify message)
+
 
 get-unique-id = do ->
     epoch = new Date 2015, 8, 1 .value-of!
@@ -13,12 +25,22 @@ get-unique-id = do ->
 app.get '/api/converted', (req, res) ->
     now = new Date!.valueOf!
     console.log now, "GET", req.url, req.path, req.query, req.headers
+
+    log-obj converted-log-bson, {
+        time: new Date!.value-of!
+        url: req.url
+        headers: req.headers
+        query: req.query
+    }
+
+    # Obsolete \/
     err <- fs.append-file converted-log, "#{JSON.stringify {req.url, req.path, req.query, req.headers}}\n"
     if !!err 
         console.error err
         res.status 500
         res.end 'error'
         return
+    # Obsolete /\
 
     res.end ''
 
@@ -53,12 +75,26 @@ app.get '/api/impression-and-click/:campaignId', (req, res) ->
     now = new Date!.valueOf!
     console.log now, "GET", req.url, req.path, req.query, req.headers
 
-    impressionId = get-unique-id now
     campaignId = base62.decode req.params.campaignId
+    impressionId = get-unique-id now
+    base62ImpressionId = base62.encode impressionId
 
     try
-        url = campaigns-map campaignId, (base62.encode impressionId)
+        url = campaigns-map campaignId, base62ImpressionId
         console.log now, "impression-and-click", req.params.campaignId, campaignId, impressionId, url
+
+        log-obj impression-and-click-log-bson, {
+            time: new Date!.value-of!
+            url: req.url
+            redirect: url
+            campaignId
+            base62CampaignId: req.params.campaignId
+            impressionId
+            base62ImpressionId: base62ImpressionId
+            headers: req.headers
+            query: req.query
+        }
+
         res.redirect url
     catch err
         console.error err
