@@ -26,9 +26,20 @@ app.get '/api/converted', (req, res) ->
     now = new Date!.valueOf!
     console.log now, "GET", req.url, req.path, req.query, req.headers
 
+    [base62CampaignId, base62ImpressionId]:arr = (req.query.impId ? req.query.impid ? "").split \-
+    if arr.length == 2
+        campaignId = base62.decode base62CampaignId
+        impressionId = base62.decode base62ImpressionId
+    else
+        impressionId = base62.decode campaignId
+
     log-obj converted-log-bson, {
         time: new Date!.value-of!
         url: req.url
+        campaignId
+        base62CampaignId
+        impressionId
+        base62ImpressionId
         headers: req.headers
         query: req.query
         ip: req.ip
@@ -45,30 +56,30 @@ app.get '/api/converted', (req, res) ->
 
     res.end ''
 
-campaigns-map = (campaignId, impressionId) ->
+campaigns-map = (campaignId, base62CampaignId, impressionId) ->
     match campaignId
     # AE, Mobitrans
     # gx
-    | 1025 => "http://pages.mobileacademy.com/om/_/ma/LearnAnyTimeAnyWhere/531/17784/?impressionid=#{impressionId}"
+    | 1025 => "http://pages.mobileacademy.com/om/_/ma/LearnAnyTimeAnyWhere/531/17784/?impressionid=#{base62CampaignId}-#{impressionId}"
     # IT, Mobitrans
     # gy
-    | 1026 => "http://start.mobileacademy.com/?campaignid=17821&forcedPage=484&v=529&impressionid=#{impressionId}"
+    | 1026 => "http://start.mobileacademy.com/?campaignid=17821&forcedPage=484&v=529&impressionid=#{base62CampaignId}-#{impressionId}"
     # gz
-    | 1027 => "http://start.mobileacademy.com/?campaignid=17821&forcedPage=656&v=526&impressionid=#{impressionId}"
+    | 1027 => "http://start.mobileacademy.com/?campaignid=17821&forcedPage=656&v=526&impressionid=#{base62CampaignId}-#{impressionId}"
     # QA, Mobitrans
     # gA
-    | 1028 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=485&v=585&impressionid=#{impressionId}"
+    | 1028 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=485&v=585&impressionid=#{base62CampaignId}-#{impressionId}"
     # gB
-    | 1029 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=727&v=545&impressionid=#{impressionId}"
+    | 1029 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=727&v=545&impressionid=#{base62CampaignId}-#{impressionId}"
     # gC
-    | 1030 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=757&v=549&impressionid=#{impressionId}"
+    | 1030 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=757&v=549&impressionid=#{base62CampaignId}-#{impressionId}"
     # OM, Mobitrans
     # gD
-    | 1031 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=609&v=542&impressionid=#{impressionId}"
+    | 1031 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=609&v=542&impressionid=#{base62CampaignId}-#{impressionId}"
     # gE
-    | 1032 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=484&v=539&impressionid=#{impressionId}"
+    | 1032 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=484&v=539&impressionid=#{base62CampaignId}-#{impressionId}"
     # gF
-    | 1033 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=458&v=640&impressionid=#{impressionId}"
+    | 1033 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=458&v=640&impressionid=#{base62CampaignId}-#{impressionId}"
 
     | _ => throw "Invalid Campaign Id"
 
@@ -81,7 +92,7 @@ app.get '/api/impression-and-click/:campaignId', (req, res) ->
     base62ImpressionId = base62.encode impressionId
 
     try
-        url = campaigns-map campaignId, base62ImpressionId
+        url = campaigns-map campaignId, req.params.campaignId, base62ImpressionId
         console.log now, "impression-and-click", req.params.campaignId, campaignId, impressionId, url
 
         log-obj impression-and-click-log-bson, {
