@@ -31,6 +31,7 @@ app.get '/api/converted', (req, res) ->
         url: req.url
         headers: req.headers
         query: req.query
+        ip: req.ip
     }
 
     # Obsolete \/
@@ -93,6 +94,7 @@ app.get '/api/impression-and-click/:campaignId', (req, res) ->
             base62ImpressionId: base62ImpressionId
             headers: req.headers
             query: req.query
+            ip: req.ip
         }
 
         res.redirect url
