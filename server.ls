@@ -5,6 +5,10 @@ app = express!
 fs = require \fs
 base62 = require \base62
 
+# Referrer: wap p478, 1890
+# ParnterId: 531
+
+
 
 log = do ->
     streams = {}
@@ -63,23 +67,23 @@ campaigns-map = (campaignId, base62CampaignId, impressionId) ->
     | 1025 => "http://pages.mobileacademy.com/om/_/ma/LearnAnyTimeAnyWhere/531/17784/?impressionid=#{base62CampaignId}-#{impressionId}"
     # IT, Mobitrans
     # gy
-    | 1026 => "http://start.mobileacademy.com/?campaignid=17821&forcedPage=484&v=529&impressionid=#{base62CampaignId}-#{impressionId}"
+    | 1026 => "http://start.mobileacademy.com/?campaignid=17821&ref=p478&forcedPage=484&v=529&impressionid=#{base62CampaignId}-#{impressionId}"
     # gz
-    | 1027 => "http://start.mobileacademy.com/?campaignid=17821&forcedPage=656&v=526&impressionid=#{base62CampaignId}-#{impressionId}"
+    | 1027 => "http://start.mobileacademy.com/?campaignid=17821&ref=p478&forcedPage=656&v=526&impressionid=#{base62CampaignId}-#{impressionId}"
     # QA, Mobitrans
     # gA
-    | 1028 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=485&v=585&impressionid=#{base62CampaignId}-#{impressionId}"
+    | 1028 => "http://wap.mozook.com/qatar/?campaignid=17822&ref=p478&forcedpage=485&v=585&impressionid=#{base62CampaignId}-#{impressionId}"
     # gB
-    | 1029 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=727&v=545&impressionid=#{base62CampaignId}-#{impressionId}"
+    | 1029 => "http://wap.mozook.com/qatar/?campaignid=17822&ref=p478&forcedpage=727&v=545&impressionid=#{base62CampaignId}-#{impressionId}"
     # gC
-    | 1030 => "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=757&v=549&impressionid=#{base62CampaignId}-#{impressionId}"
+    | 1030 => "http://wap.mozook.com/qatar/?campaignid=17822&ref=p478&forcedpage=757&v=549&impressionid=#{base62CampaignId}-#{impressionId}"
     # OM, Mobitrans
     # gD
-    | 1031 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=609&v=542&impressionid=#{base62CampaignId}-#{impressionId}"
+    | 1031 => "http://start.mobileacademy.com?campaignid=17823&ref=p478&forcedpage=609&v=542&impressionid=#{base62CampaignId}-#{impressionId}"
     # gE
-    | 1032 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=484&v=539&impressionid=#{base62CampaignId}-#{impressionId}"
+    | 1032 => "http://start.mobileacademy.com?campaignid=17823&ref=p478&forcedpage=484&v=539&impressionid=#{base62CampaignId}-#{impressionId}"
     # gF
-    | 1033 => "http://start.mobileacademy.com?campaignid=17823&forcedpage=458&v=640&impressionid=#{base62CampaignId}-#{impressionId}"
+    | 1033 => "http://start.mobileacademy.com?campaignid=17823&ref=p478&forcedpage=458&v=640&impressionid=#{base62CampaignId}-#{impressionId}"
 
     | _ => throw "Invalid Campaign Id"
 

@@ -1,0 +1,30 @@
+<html>
+<head>
+<script>
+function load() {
+	var url = window.location.href.split('#').splice(1).join('#');
+	top.frames[0].document.body.innerHTML = '<img src="' + url + '"/>'
+}
+function loadGET() {
+	var url = window.location.href.split('#').splice(1).join('#');
+	var tuple = url.split('?')
+	var head = tuple[0]
+	var tail = tuple[1].split('&').map(function(t) {
+		var kv = t.split('=')
+		return '<input type="hidden" name="' + kv[0] + '" value="' + kv[1] + '">';
+	}).reduce(function(a, b) {return a + b});
+
+    var postdata = '<form id=dynForm method=GET action="' + head + '">' + tail + '</form>';
+    
+    top.frames[0].document.body.innerHTML=postdata;
+    top.frames[0].document.getElementById('dynForm').submit();
+}
+</script>
+</head>
+<body onload="load()">
+ 
+<iframe src="about:blank" id="noreferer" name="noreferer"></iframe>
+ 
+ 
+</body>
+</html>
