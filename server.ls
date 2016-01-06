@@ -50,9 +50,10 @@ campaigns-auto-map = (campaignId, base62CampaignId, impressionId) ->
     match campaignId
     # OM, Mobitrans
     # gD
+    # http://localhost:8081/api/a/impression-and-click/gD
     | 1031 => 
         visit-url = "http://start.mobileacademy.com/?campaignid=17823&ref=p478&forcedpage=609&v=542&impressionid=#{modified-impressionId}"
-        sub-url =   "http://start.mobileacademy.com/default.aspx?campaignid=17823&forcedpage=609&v=542&&SubMethod=DirectWAP&PageType=LandingPage&IsEmbeddedOcFlag=False&OC=2&SuperCampaignID=911&RefID=1890&PageID=609&ServiceID=3100&Country=Oman&reqType=DirectWAPSubmission&XMobiWAPBrowser=False&Choice=1&ref=p478&impressionid=#{modified-impressionId}"
+        sub-url =   "http://start.mobileacademy.com/default.aspx?campaignid=17823&forcedpage=609&v=542&ref=p478&impressionid=#{modified-impressionId}&SubMethod=DirectWAP&PageType=LandingPage&IsEmbeddedOcFlag=False&OC=2&SuperCampaignID=911&RefID=1890&PageID=609&ServiceID=3100&Country=Oman&reqType=DirectWAPSubmission&XMobiWAPBrowser=False&Choice=1"
         if Math.random! > 0.3 
             sub-url = visit-url
         {
@@ -61,9 +62,29 @@ campaigns-auto-map = (campaignId, base62CampaignId, impressionId) ->
         }
     # Unknown campaign
     | 9841 => {
-            visit-url: "http://start.mobileacademy.com/?campaignid=9841&ref=0&forcedpage=609&v=542"
-            sub-url:   "http://start.mobileacademy.com/default.aspx?campaignid=9841&forcedpage=609&v=542&&SubMethod=DirectWAP&PageType=LandingPage&IsEmbeddedOcFlag=False&OC=2&SuperCampaignID=911&RefID=0&PageID=609&ServiceID=3100&Country=Oman&reqType=DirectWAPSubmission&XMobiWAPBrowser=False&Choice=1"
+        visit-url: "http://start.mobileacademy.com/?campaignid=9841&ref=0&forcedpage=609&v=542"
+        sub-url:   "http://start.mobileacademy.com/default.aspx?campaignid=9841&forcedpage=609&v=542&&SubMethod=DirectWAP&PageType=LandingPage&IsEmbeddedOcFlag=False&OC=2&SuperCampaignID=911&RefID=0&PageID=609&ServiceID=3100&Country=Oman&reqType=DirectWAPSubmission&XMobiWAPBrowser=False&Choice=1"
     }
+    # QA
+    # gB
+    # http://localhost:8081/api/a/impression-and-click/gB
+    | 1029 => 
+        visit-url = "http://wap.mozook.com/qatar/?campaignid=17822&ref=p478&forcedpage=727&v=545&impressionid=#{modified-impressionId}"
+        sub-url = "http://wap.mozook.com/qatar/?campaignid=17822&forcedpage=727&v=545&impressionid=#{modified-impressionId}&SubMethod=DirectWAP&PageType=LandingPage&IsEmbeddedOcFlag=False&OC=10&SuperCampaignID=192&RefID=1890&PageID=727&ServiceID=3100&Country=Qatar&reqType=DirectWAPSubmission&XMobiWAPBrowser=False&Choice=1"
+        if Math.random! > 0.3 
+            sub-url = visit-url
+        {
+            visit-url
+            sub-url
+        }
+    # Unknown campaign
+    # 2j9
+    # http://localhost:8081/api/a/impression-and-click/2j9
+    | 8875 => 
+        {
+            visit-url: "http://wap.mozook.com/qatar/?campaignid=8875"
+            sub-url: "http://wap.mozook.com/qatar/?campaignid=8875&SubMethod=DirectWAP&PageType=LandingPage&IsEmbeddedOcFlag=False&OC=10&SuperCampaignID=192&RefID=0&PageID=727&ServiceID=3100&Country=Qatar&reqType=DirectWAPSubmission&XMobiWAPBrowser=False&Choice=1"
+        }
     | _ => throw "Invalid Campaign Id"
 
 campaigns-map = (campaignId, base62CampaignId, impressionId) ->
