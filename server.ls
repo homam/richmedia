@@ -1,4 +1,5 @@
 {http-port, converted-log, impression-and-click-log-bson, converted-log-bson} = require \./config
+{each} = require \prelude-ls
 express = require \express
 app = express!
     ..disable 'x-powered-by'
@@ -116,37 +117,41 @@ campaigns-map = (campaignId, base62CampaignId, impressionId) ->
     | _ => throw "Invalid Campaign Id"
 
 
-app.get '/api/a/impression-and-click/:campaignId', (req, res) ->
-    now = new Date!.valueOf!
-    console.log now, "GET", req.url, req.path, req.query, req.headers
+[
+    '/api/a/impression-and-click/:campaignId'
+    '/api/a/iac/:campaignId'
+] |> each (pattern) ->
+    app.get pattern, (req, res) ->
+        now = new Date!.valueOf!
+        console.log now, "GET", req.url, req.path, req.query, req.headers
 
-    campaignId = base62.decode req.params.campaignId
-    impressionId = get-unique-id now
-    base62ImpressionId = base62.encode impressionId
+        campaignId = base62.decode req.params.campaignId
+        impressionId = get-unique-id now
+        base62ImpressionId = base62.encode impressionId
 
-    try
-        urls = campaigns-auto-map campaignId, req.params.campaignId, base62ImpressionId
-        console.log now, "/a/impression-and-click", req.params.campaignId, campaignId, impressionId, urls.visit-url, urls.sub-url
+        try
+            urls = campaigns-auto-map campaignId, req.params.campaignId, base62ImpressionId
+            console.log now, "/a/impression-and-click", req.params.campaignId, campaignId, impressionId, urls.visit-url, urls.sub-url
 
-        log-obj impression-and-click-log-bson, {
-            time: new Date!.value-of!
-            url: req.url
-            redirect: urls.visit-url
-            campaignId
-            base62CampaignId: req.params.campaignId
-            impressionId
-            base62ImpressionId: base62ImpressionId
-            headers: req.headers
-            query: req.query
-            ip: req.ip
-            auto: true
-        }
+            log-obj impression-and-click-log-bson, {
+                time: new Date!.value-of!
+                url: req.url
+                redirect: urls.visit-url
+                campaignId
+                base62CampaignId: req.params.campaignId
+                impressionId
+                base62ImpressionId: base62ImpressionId
+                headers: req.headers
+                query: req.query
+                ip: req.ip
+                auto: true
+            }
 
-        serve-tag res, urls
-    catch err
-        console.error err
-        res.status 500
-        res.end err.toString!
+            serve-tag res, urls
+        catch err
+            console.error err
+            res.status 500
+            res.end err.toString!
 
 app.get '/api/impression-and-click/:campaignId', (req, res) ->
     now = new Date!.valueOf!
@@ -173,7 +178,7 @@ app.get '/api/impression-and-click/:campaignId', (req, res) ->
             ip: req.ip
         }
 
-        res.redirect url
+        res.redirect "/templates/redir.html\##{url}"
     catch err
         console.error err
         res.status 500
